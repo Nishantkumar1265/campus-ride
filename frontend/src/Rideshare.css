@@ -1,0 +1,509 @@
+/* =========================================
+   1. GLOBAL STYLES & ANIMATIONS
+   ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif; /* Modern font feel */
+    background: linear-gradient(-45deg, #f1f4f9, #dff1ff, #eef2f3, #e3e3e3);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #2c3e50;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* =========================================
+   2. NEW PREMIUM HEADER (NAVBAR)
+   ========================================= */
+.main-header {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 15px 30px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-top: 10px;
+}
+
+
+.user-greeting {
+    font-size: 14px;
+    color: #555;
+    background: rgba(0,0,0,0.04);
+    padding: 8px 15px;
+    border-radius: 50px;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+/* =========================================
+   3. MODERN GLASS CARDS
+   ========================================= */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 20px !important;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* =========================================
+   4. BUTTONS WITH GRADIENTS
+   ========================================= */
+button {
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+button:active { transform: scale(0.95); }
+
+.btn-primary { 
+    background: linear-gradient(135deg, #3498db, #2980b9); 
+    color: white; 
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-success { 
+    background: linear-gradient(135deg, #2ecc71, #27ae60); 
+    color: white;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.btn-danger { 
+    background: linear-gradient(135deg, #e74c3c, #c0392b); 
+    color: white;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.btn-warning { 
+    background: linear-gradient(135deg, #f39c12, #d35400); 
+    color: white;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+}
+
+.btn-purple { 
+    background: linear-gradient(135deg, #9b59b6, #8e44ad); 
+    color: white;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+/* =========================================
+   5. RIDE INFO & GRIDS
+   ========================================= */
+.rides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.ride-info h3 {
+    font-size: 18px;
+    line-height: 1.4;
+    color: #2c3e50;
+}
+
+.ride-status-badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-accepted { background: #e8f8f5; color: #27ae60; border: 1px solid #d1f2eb; }
+.status-pending { background: #fef9e7; color: #f39c12; border: 1px solid #fcf3cf; }
+
+/* =========================================
+   6. AUTH & FORMS
+   ========================================= */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+}
+
+.auth-card { width: 100%; max-width: 420px; }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-field {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e6ed;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #fbfcfd;
+}
+
+.input-field:focus {
+    border-color: #3498db;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+}
+
+/* =========================================
+   7. CHAT UI
+   ========================================= */
+.chat-container {
+    height: 480px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 25px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg-bubble {
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    max-width: 75%;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.msg-me { 
+    background: #3498db; 
+    color: white; 
+    align-self: flex-end; 
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.msg-them { 
+    background: white; 
+    color: #333; 
+    align-self: flex-start; 
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   8. RESPONSIVE FIXES
+   ========================================= */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    .user-greeting { display: block; margin-bottom: 10px; margin-right: 0; }
+}
+
+/* =========================================
+   1. GLOBAL STYLES & ANIMATIONS
+   ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(-45deg, #f1f4f9, #dff1ff, #eef2f3, #e3e3e3);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #2c3e50;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* =========================================
+   2. NEW PREMIUM HEADER (NAVBAR)
+   ========================================= */
+.main-header {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 15px 30px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-top: 10px;
+}
+
+
+.user-greeting {
+    font-size: 14px;
+    color: #555;
+    background: rgba(0,0,0,0.04);
+    padding: 8px 15px;
+    border-radius: 50px;
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+/* =========================================
+   3. MODERN GLASS CARDS
+   ========================================= */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 20px !important;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* =========================================
+   4. BUTTONS FIX (Width Control)
+   ========================================= */
+button {
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    width: auto; /* Button full width nahi lega */
+    display: inline-block;
+}
+
+button:active { transform: scale(0.95); }
+
+.btn-primary { 
+    background: linear-gradient(135deg, #3498db, #2980b9); 
+    color: white; 
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    min-width: 130px; /* Minimum width for decent look */
+}
+
+/* Baki buttons wahi rahenge... */
+.btn-success { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
+.btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+.btn-warning { background: linear-gradient(135deg, #f39c12, #d35400); color: white; }
+.btn-purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+
+/* =========================================
+   5. RIDE INFO & FOOTER (Important Fix)
+   ========================================= */
+.rides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between; /* Price Left, Button Right */
+    align-items: center;
+    margin-top: auto; /* Card ke bottom mein dhakel dega */
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.route-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+
+/* =========================================
+   NEW: ROW-WISE MY BOOKINGS LAYOUT
+   ========================================= */
+
+/* Container jiske andar saare cards hain */
+.my-bookings-container {
+    display: flex;
+    flex-wrap: wrap; /* Jab jagah na ho toh agli line mein jao */
+    gap: 25px;       /* Cards ke beech mein gap */
+    justify-content: center; /* Cards ko page ke center mein rakho */
+    margin-top: 30px;
+}
+
+/* Single Booking Card */
+.booking-card {
+    flex: 1 1 320px; /* Base size 320px, par grow/shrink kar sakte hain */
+    max-width: 400px; /* Ek card bahut bada na ho jaye */
+    display: flex;
+    flex-direction: column; /* Content top-to-bottom rahega */
+    justify-content: space-between; /* Header top pe, actions bottom pe */
+    min-height: 250px; /* Cards ki height ek jaisi rahe */
+    padding: 20px !important; /* Thoda tight padding */
+}
+
+/* Route Info within Card */
+.route-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Spacing between route items */
+.route-item-text {
+    margin: 5px 0;
+}
+
+/* Payment area */
+.payment-section {
+    background: rgba(46, 204, 113, 0.05); /* Softer green background */
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+/* Action Area at the Bottom */
+.card-actions {
+    margin-top: auto; /* Bottom edge pe stick karo */
+    display: flex;
+    justify-content: flex-end; /* Buttons right side mein align ho */
+    gap: 10px;
+}
+
+/* My Bookings ka container */
+.my-rides-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Card ka size control karne ke liye */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Saare cards ek barabar height ke honge */
+}
+
+/* Status Badges */
+.status-completed {
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Cards ko row mein lane ke liye main container */
+.rides-grid {
+    display: grid;
+    /* Yeh line 1 row mein 3 cards tak layegi, screen choti hone par apne aap kam kar degi */
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap: 25px;
+    padding: 20px 0;
+    align-items: start;
+}
+
+/* Taki card ki width grid ke hisab se set rahe */
+.rides-grid .glass-card {
+    width: 100%;
+    margin: 0; /* Purana margin hata do */
+    min-height: 380px; /* Sab cards ek barabar dikhen */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* 1. Header Buttons ko ek jaisa banane ke liye */
+.nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nav-actions button {
+    min-width: 110px; /* Dono buttons ki width fix kar di */
+    height: 42px;     /* Height bhi ek jaisi */
+    padding: 0 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* 2. Search Button ko chota aur align karne ke liye */
+.hero-card .btn-primary {
+    height: 52px;      /* Inputs ki height ke barabar */
+    padding: 0 35px;
+    font-size: 16px;
+    align-self: center; /* Vertical centering fixed */
+    margin: 0;         /* Extra margin hataya */
+}
+
+/* Inputs aur Button ka combo box */
+.hero-card div[style*="background: white"] {
+    display: flex;
+    align-items: center; /* Sab kuch line mein rahega */
+    gap: 15px;
+}
