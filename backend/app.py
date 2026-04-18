@@ -54,12 +54,12 @@ def register():
     cursor = conn.cursor(dictionary=True)
     try:
         # Check if user already exists first (Optional but good practice)
-        cursor.execute("SELECT user_id FROM Users WHERE email = %s", (email,))
+        cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
         if cursor.fetchone():
             return jsonify({"error": "Yeh email pehle se registered hai!"}), 400
 
         # User insert karna
-        sql = "INSERT INTO Users (name, email, password, role) VALUES (%s, %s, %s, %s)"
+        sql = "INSERT INTO users (name, email, password, role) VALUES (%s, %s, %s, %s)"
         val = (name, email, hashed_password, role)
         cursor.execute(sql, val)
         conn.commit()
@@ -88,7 +88,7 @@ def login():
     cursor = conn.cursor(dictionary=True)
     
     try:
-        cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
         if user and check_password_hash(user['password'], password):
@@ -101,7 +101,7 @@ def login():
         conn.close()
 
 # ----------------------------------------------------
-# 🚗 RIDE APIs (Post & Fetch Rides)
+# 🚗 RIDE APIs (Post & Fetch rides)
 # ----------------------------------------------------
 
 @app.route('/api/rides', methods=['POST'])
@@ -122,7 +122,7 @@ def post_ride():
     cursor = conn.cursor(dictionary=True)
     
     try:
-        sql = """INSERT INTO Rides (driver_id, source, destination, departure_time, seats_available, cost_per_seat) 
+        sql = """INSERT INTO rides (driver_id, source, destination, departure_time, seats_available, cost_per_seat) 
                  VALUES (%s, %s, %s, %s, %s, %s)"""
         val = (driver_id, source, destination, departure_time, seats_available, cost_per_seat)
         cursor.execute(sql, val)
@@ -141,8 +141,8 @@ def get_rides():
     try:
         sql = """
             SELECT r.*, u.name as driver_name, u.rating as driver_rating
-            FROM Rides r
-            JOIN Users u ON r.driver_id = u.user_id
+            FROM rides r
+            JOIN users u ON r.driver_id = u.user_id
             WHERE r.status = 'posted' AND r.seats_available > 0
             ORDER BY r.departure_time ASC
         """
@@ -171,14 +171,14 @@ def book_ride():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT seats_available FROM Rides WHERE ride_id = %s", (ride_id,))
+        cursor.execute("SELECT seats_available FROM rides WHERE ride_id = %s", (ride_id,))
         ride = cursor.fetchone()
 
         if not ride or ride['seats_available'] <= 0:
             return jsonify({"error": "Sorry, koi seat available nahi hai!"}), 400
 
         cursor.execute(
-            "INSERT INTO Bookings (ride_id, passenger_id, status) VALUES (%s, %s, 'pending')",
+            "INSERT INTO bookings (ride_id, passenger_id, status) VALUES (%s, %s, 'pending')",
             (ride_id, passenger_id)
         )
         conn.commit()
@@ -198,9 +198,9 @@ def get_driver_requests(driver_id):
         sql = """
             SELECT b.booking_id, b.status as booking_status, u.name as passenger_name, 
                    r.source, r.destination, r.ride_id
-            FROM Bookings b
-            JOIN Rides r ON b.ride_id = r.ride_id
-            JOIN Users u ON b.passenger_id = u.user_id
+            FROM bookings b
+            JOIN rides r ON b.ride_id = r.ride_id
+            JOIN users u ON b.passenger_id = u.user_id
             WHERE r.driver_id = %s AND b.status IN ('pending', 'accepted')
         """
         cursor.execute(sql, (driver_id,))
@@ -219,12 +219,12 @@ def respond_booking(booking_id):
     cursor = conn.cursor(dictionary=True)
     try:
         if action == 'accepted':
-            cursor.execute("SELECT ride_id FROM Bookings WHERE booking_id = %s", (booking_id,))
+            cursor.execute("SELECT ride_id FROM bookings WHERE booking_id = %s", (booking_id,))
             booking = cursor.fetchone()
             if booking:
-                cursor.execute("UPDATE Rides SET seats_available = seats_available - 1 WHERE ride_id = %s", (booking['ride_id'],))
+                cursor.execute("UPDATE rides SET seats_available = seats_available - 1 WHERE ride_id = %s", (booking['ride_id'],))
         
-        cursor.execute("UPDATE Bookings SET status = %s WHERE booking_id = %s", (action, booking_id))
+        cursor.execute("UPDATE bookings SET status = %s WHERE booking_id = %s", (action, booking_id))
         conn.commit()
         return jsonify({"message": f"Request {action} successfully!"}), 200
     except Exception as e:
@@ -239,7 +239,7 @@ def start_ride(ride_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE Rides SET status = 'in_progress' WHERE ride_id = %s", (ride_id,))
+        cursor.execute("UPDATE rides SET status = 'in_progress' WHERE ride_id = %s", (ride_id,))
         conn.commit()
         return jsonify({"message": "Ride started! 🚗💨"}), 200
     finally:
@@ -255,9 +255,9 @@ def get_my_bookings(user_id):
             SELECT b.booking_id, b.status as booking_status, b.created_at as booked_on,
                    r.source, r.destination, r.departure_time, r.cost_per_seat,
                    u.name as driver_name, u.rating as driver_rating
-            FROM Bookings b
-            JOIN Rides r ON b.ride_id = r.ride_id
-            JOIN Users u ON r.driver_id = u.user_id
+            FROM bookings b
+            JOIN rides r ON b.ride_id = r.ride_id
+            JOIN users u ON r.driver_id = u.user_id
             WHERE b.passenger_id = %s
             ORDER BY r.departure_time DESC
         """
@@ -275,7 +275,7 @@ def get_driver_rides(driver_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT * FROM Rides WHERE driver_id = %s ORDER BY departure_time DESC", (driver_id,))
+        cursor.execute("SELECT * FROM rides WHERE driver_id = %s ORDER BY departure_time DESC", (driver_id,))
         rides = cursor.fetchall()
         return jsonify(rides), 200
     finally:
@@ -291,8 +291,8 @@ def complete_ride(ride_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE Rides SET status = 'completed' WHERE ride_id = %s", (ride_id,))
-        cursor.execute("UPDATE Bookings SET status = 'completed' WHERE ride_id = %s", (ride_id,))
+        cursor.execute("UPDATE rides SET status = 'completed' WHERE ride_id = %s", (ride_id,))
+        cursor.execute("UPDATE bookings SET status = 'completed' WHERE ride_id = %s", (ride_id,))
         conn.commit()
         return jsonify({"message": "Ride completed! 🎉"}), 200
     finally:
@@ -307,11 +307,11 @@ def rate_driver(booking_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("UPDATE Bookings SET rating = %s WHERE booking_id = %s", (rating, booking_id))
+        cursor.execute("UPDATE bookings SET rating = %s WHERE booking_id = %s", (rating, booking_id))
         
         cursor.execute("""
-            SELECT r.driver_id FROM Bookings b
-            JOIN Rides r ON b.ride_id = r.ride_id
+            SELECT r.driver_id FROM bookings b
+            JOIN rides r ON b.ride_id = r.ride_id
             WHERE b.booking_id = %s
         """, (booking_id,))
         driver = cursor.fetchone()
@@ -319,13 +319,13 @@ def rate_driver(booking_id):
         if driver:
             driver_id = driver['driver_id']
             cursor.execute("""
-                SELECT AVG(b.rating) as avg_rating FROM Bookings b
-                JOIN Rides r ON b.ride_id = r.ride_id
+                SELECT AVG(b.rating) as avg_rating FROM bookings b
+                JOIN rides r ON b.ride_id = r.ride_id
                 WHERE r.driver_id = %s AND b.rating IS NOT NULL
             """, (driver_id,))
             avg_data = cursor.fetchone()
             new_avg = round(avg_data['avg_rating'], 1)
-            cursor.execute("UPDATE Users SET rating = %s WHERE user_id = %s", (new_avg, driver_id))
+            cursor.execute("UPDATE users SET rating = %s WHERE user_id = %s", (new_avg, driver_id))
         
         conn.commit()
         return jsonify({"message": "Thank you for rating! ⭐"}), 200
@@ -354,7 +354,7 @@ def send_message():
     cursor = conn.cursor()
     try:
         cursor.execute(
-            "INSERT INTO Messages (booking_id, sender_id, message_text) VALUES (%s, %s, %s)",
+            "INSERT INTO messages (booking_id, sender_id, message_text) VALUES (%s, %s, %s)",
             (booking_id, sender_id, message_text)
         )
         conn.commit()
@@ -373,8 +373,8 @@ def get_messages(booking_id):
     try:
         sql = """
             SELECT m.message_id, m.message_text, m.sent_at, m.sender_id, u.name as sender_name
-            FROM Messages m
-            JOIN Users u ON m.sender_id = u.user_id
+            FROM messages m
+            JOIN users u ON m.sender_id = u.user_id
             WHERE m.booking_id = %s
             ORDER BY m.sent_at ASC
         """
@@ -396,8 +396,8 @@ def get_driver_earnings(driver_id):
     try:
         sql = """
             SELECT SUM(r.cost_per_seat) as total_earnings
-            FROM Bookings b
-            JOIN Rides r ON b.ride_id = r.ride_id
+            FROM bookings b
+            JOIN rides r ON b.ride_id = r.ride_id
             WHERE r.driver_id = %s 
             AND r.status = 'completed' 
             AND b.status = 'accepted'
