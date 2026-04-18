@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Yeh tumhare Python backend ka base URL hai
+// Yeh tumhare naye LIVE Render backend ka base URL hai
 const API = axios.create({
-    baseURL: 'http://127.0.0.1:5000/api',
+    baseURL: 'https://campus-ride-zicq.onrender.com/api',
 });
 
 export default API;
