@@ -86,6 +86,7 @@ def login():
     finally:
         cursor.close()
         conn.close()
+
 # ----------------------------------------------------
 # 🚗 RIDE APIs (Post & Fetch Rides)
 # ----------------------------------------------------
@@ -145,10 +146,6 @@ def get_rides():
     finally:
         cursor.close()
         conn.close()
-
-# ----------------------------------------------------
-# 🎟️ BOOKING APIs (Join a Ride)
-# ----------------------------------------------------
 
 # ----------------------------------------------------
 # 🎟️ BOOKING & RIDE MANAGEMENT APIs (Request, Accept, Start)
@@ -276,6 +273,7 @@ def get_my_bookings(user_id):
     finally:
         cursor.close()
         conn.close()
+
 # 9. Get Driver's Posted Rides (Dashboard ke liye)
 @app.route('/api/driver/rides/<int:driver_id>', methods=['GET'])
 def get_driver_rides(driver_id):
@@ -351,6 +349,7 @@ def rate_driver(booking_id):
     finally:
         cursor.close()
         conn.close()
+
 # ----------------------------------------------------
 # 💬 CHAT SYSTEM APIs
 # ----------------------------------------------------
@@ -402,6 +401,7 @@ def get_messages(booking_id):
     finally:
         cursor.close()
         conn.close()
+
 # ----------------------------------------------------
 
 # New API: Get Driver's Total Earnings
@@ -433,4 +433,5 @@ def get_driver_earnings(driver_id):
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))
-    app.run(debug=True, port=port)
+    # Render par host="0.0.0.0" hona zaroori hai taaki external requests allow ho sakein
+    app.run(host="0.0.0.0", port=port, debug=False)
